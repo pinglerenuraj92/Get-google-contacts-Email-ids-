@@ -1,0 +1,69 @@
+
+
+<html lang="en">
+  <head>
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="504668772632-152v2p5hks5m2d0spjiukfc297118220.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script>
+      function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+            console.log('User signed out.');
+        });
+      }
+      function disassociate() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.disconnect().then(function () {
+            console.log('User disconnected from association with app.');
+        });
+    }
+
+      function onSignIn(googleUser) {
+            // Useful data for your client-side scripts:
+            var profile = googleUser.getBasicProfile();
+            console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+            console.log("Name: " + profile.getName());
+            console.log("Image URL: " + profile.getImageUrl());
+            console.log("Email: " + profile.getEmail());
+
+            //alert("ID: " + profile.getId() +"\r\nName: " + profile.getName()+"\r\nImage URL: " + profile.getImageUrl()  +"\r\nEmail: " + profile.getEmail());
+            // The ID token you need to pass to your backend:
+            var id_token = googleUser.getAuthResponse().id_token;
+            console.log("ID Token: " + id_token);
+      };
+    </script>
+
+
+<!-- REMOVE following  script  if you do not want to automatically log in -->
+<script>
+  function loadin() {
+        console.log('I am loadin.');
+    gapi.load('auth2', function() {
+      auth2 = gapi.auth2.getAuthInstance({
+        client_id: '504668772632-152v2p5hks5m2d0spjiukfc297118220.apps.googleusercontent.com',
+        fetch_basic_profile: true,
+        scope: 'profile',
+        redirect_uri: 'http://www.example.com/gplus.html'
+      });
+
+      // Sign the user in, and then retrieve their ID.
+      auth2.signIn().then(function() {
+        var profile = auth2.currentUser.get().getBasicProfile();
+        console.log("MYY WOW: " + profile.getId()+"\r\nNamee: "+profile.getName()+"\r\nImage URL: " + profile.getImageUrl()  +"\r\nEmail: " + profile.getEmail());
+      });
+    });
+  }
+
+</script>
+  </head>
+  <body onload="loadin()">
+  <!-- REMOVE onload if you do not want to automatically log in -->
+
+    <div id="login-button" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+
+    <div><a href="#" onclick="signOut();">Sign out</a></div>
+    <div><a href="#" onclick="disassociate();">Disassociate App and Site (easily undone)</a></div>
+  </body>
+</html>
+
